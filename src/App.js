@@ -1,25 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useEffect, useState} from 'react'
+import CardList from './components/CardList'
 
-function App() {
+const App = () => {
+  const [data, setData] = useState([])
+  const [isDragging, setIsDragging] = useState(false)
+
+  const handleDragStart = (e, data) => {
+    setIsDragging(true);
+  }
+
+  const handleDragEnd = () => {
+    setIsDragging(false);
+  }
+
+  useEffect(() => {
+    fetch('/data.json')
+        .then((response) => response.json())
+        .then((data) => setData(data));
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+      <div className="container">
+        <CardList data={data} onDragStart={handleDragStart} onDragEnd={handleDragEnd} />
+      </div>
+  )
 }
 
-export default App;
+export default App
